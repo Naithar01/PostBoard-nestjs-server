@@ -1,4 +1,13 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { PostEntity } from './Entity/post.entity';
+import { PostService } from './post.service';
 
 @Controller('post')
-export class PostController {}
+export class PostController {
+  constructor(private postService: PostService) {}
+
+  @Get()
+  getAllPost(): Promise<PostEntity[]> {
+    return this.postService.getAll();
+  }
+}

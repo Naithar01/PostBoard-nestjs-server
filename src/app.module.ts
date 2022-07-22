@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
+import { PostEntity } from './post/Entity/post.entity';
 import { PostModule } from './post/post.module';
 
 @Module({
@@ -14,7 +15,7 @@ import { PostModule } from './post/post.module';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
-      entities: [],
+      entities: [PostEntity],
       synchronize: true,
     }),
     PostModule,
