@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseUUIDPipe,
   Post,
   Res,
 } from '@nestjs/common';
@@ -30,7 +31,7 @@ export class PostController {
 
   @Delete(':id')
   async deletePost(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Res() res: Response,
   ): Promise<Response<any, Record<string, any>>> {
     await this.postService.deletePost(id);
