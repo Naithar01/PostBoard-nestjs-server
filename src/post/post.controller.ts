@@ -5,12 +5,13 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Res,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
-import { CreatePostDto } from './DTO/post.dto';
+import { CreatePostDto, UpdatePostDto } from './DTO/post.dto';
 import { PostEntity } from './Entity/post.entity';
 import { PostService } from './post.service';
 
@@ -36,5 +37,13 @@ export class PostController {
   ): Promise<Response<any, Record<string, any>>> {
     await this.postService.deletePost(id);
     return res.status(200).json();
+  }
+
+  @Patch(':id')
+  updatePost(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
+    return this.postService.updatePost(id, updatePostDto);
   }
 }

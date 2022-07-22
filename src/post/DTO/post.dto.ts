@@ -19,3 +19,17 @@ export class CreatePostDto {
   })
   content: string;
 }
+
+export class UpdatePostDto {
+  @ApiProperty({
+    type: String,
+    description: 'Post title 수정 내용',
+  })
+  title: string;
+
+  @ApiProperty({
+    type: String,
+    description: 'Post content 수정 내용',
+  })
+  content: string;
+}
