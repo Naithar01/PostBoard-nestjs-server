@@ -30,4 +30,8 @@ export class PostService {
     await this.PostRepository.save(NewPost);
     return NewPost;
   }
+
+  async deletePost(id: string): Promise<void> {
+    await this.PostRepository.delete({ id: id });
+  }
 }

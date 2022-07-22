@@ -1,9 +1,19 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './DTO/post.dto';
 import { PostEntity } from './Entity/post.entity';
 import { PostService } from './post.service';
-import { v4 as uuid } from 'uuid';
 
+@ApiTags('Post')
 @Controller('api/post')
 export class PostController {
   constructor(private postService: PostService) {}
@@ -16,5 +26,14 @@ export class PostController {
   @Post()
   createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
     return this.postService.createPost(createPostDto);
+  }
+
+  @Delete(':id')
+  async deletePost(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<Response<any, Record<string, any>>> {
+    await this.postService.deletePost(id);
+    return res.status(200).json();
   }
 }
