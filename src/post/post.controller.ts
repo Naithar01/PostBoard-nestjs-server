@@ -7,9 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
-  Res,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { CreatePostDto, UpdatePostDto } from './DTO/post.dto';
 import { PostEntity } from './Entity/post.entity';

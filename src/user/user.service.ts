@@ -57,4 +57,8 @@ export class UserService {
 
     return NewUser;
   }
+
+  async deleteUser(id: string): Promise<void> {
+    await this.UserRepository.delete({ id: id });
+  }
 }
