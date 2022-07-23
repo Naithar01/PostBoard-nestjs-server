@@ -31,12 +31,9 @@ export class PostController {
   }
 
   @Delete(':id')
-  async deletePost(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Res() res: Response,
-  ): Promise<Response<any, Record<string, any>>> {
+  async deletePost(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.postService.deletePost(id);
-    return res.status(200).json();
+    return;
   }
 
   @Patch(':id')

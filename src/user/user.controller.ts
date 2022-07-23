@@ -2,6 +2,7 @@ import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './Entity/user.entity';
+import { LocalAuthGaurd } from './Gaurd/local-auth.gaurd';
 import { UserService } from './user.service';
 
 @ApiTags('User')
@@ -14,7 +15,7 @@ export class UserController {
     return await this.userService.getAllUser();
   }
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGaurd)
   @Post('login')
   async login(@Request() req) {
     return req.user;
