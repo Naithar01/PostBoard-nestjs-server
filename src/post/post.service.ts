@@ -50,4 +50,12 @@ export class PostService {
 
     return UpdatedPost;
   }
+
+  async getPostById(id: string): Promise<PostEntity> {
+    return await this.PostRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+  }
 }

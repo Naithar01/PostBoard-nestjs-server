@@ -46,4 +46,9 @@ export class PostController {
   ) {
     return this.postService.updatePost(id, updatePostDto);
   }
+
+  @Get(':id')
+  getPostById(@Param('id') id: string): Promise<PostEntity> {
+    return this.postService.getPostById(id);
+  }
 }
