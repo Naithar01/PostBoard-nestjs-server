@@ -6,6 +6,7 @@ import { PostEntity } from './post/Entity/post.entity';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { UserEntity } from './user/Entity/user.entity';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
-      entities: [PostEntity],
+      entities: [PostEntity, UserEntity],
       synchronize: true,
     }),
     PostModule,
