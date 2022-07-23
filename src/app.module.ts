@@ -5,7 +5,6 @@ import { AppController } from './app.controller';
 import { PostEntity } from './post/Entity/post.entity';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
-import { AuthModule } from './auth/auth.module';
 import { UserEntity } from './user/Entity/user.entity';
 
 @Module({
@@ -23,7 +22,6 @@ import { UserEntity } from './user/Entity/user.entity';
     }),
     PostModule,
     UserModule,
-    AuthModule,
   ],
   controllers: [AppController],
 })

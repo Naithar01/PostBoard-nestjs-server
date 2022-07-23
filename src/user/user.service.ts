@@ -17,4 +17,18 @@ export class UserService {
       },
     });
   }
+
+  async validateUser(
+    username: string,
+    password: string,
+  ): Promise<{ id: string; username: string; create_at: Date } | null> {
+    const user = await this.findUserByUsername(username);
+
+    if (user && user.password === password) {
+      const { password, ...result } = user;
+      return result;
+    }
+
+    return null;
+  }
 }
