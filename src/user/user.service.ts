@@ -10,6 +10,10 @@ export class UserService {
     private UserRepository: Repository<UserEntity>,
   ) {}
 
+  async getAllUser(): Promise<UserEntity[]> {
+    return await this.UserRepository.find();
+  }
+
   async findUserByUsername(username: string): Promise<UserEntity | null> {
     return await this.UserRepository.findOne({
       where: {
