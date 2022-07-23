@@ -6,7 +6,6 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './DTO/user.dto';
 import { UserEntity } from './Entity/user.entity';

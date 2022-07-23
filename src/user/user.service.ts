@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './DTO/user.dto';
 import { UserEntity } from './Entity/user.entity';
 import { v4 as uuid } from 'uuid';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -30,9 +31,13 @@ export class UserService {
   ): Promise<{ id: string; username: string; create_at: Date } | null> {
     const user = await this.findUserByUsername(username);
 
-    if (user && user.password === password) {
-      const { password, ...result } = user;
-      return result;
+    if (user) {
+      const compare_passwort = await bcrypt.compare(password, user.password);
+
+      if (compare_passwort) {
+        const { password, ...result } = user;
+        return result;
+      }
     }
 
     return null;
@@ -40,11 +45,11 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password } = createUserDto;
-
+    const hash_passwort = await bcrypt.hash(password, process.env.BCRYPT_SALT);
     const NewUser: UserEntity = {
       id: uuid(),
       username,
-      password,
+      password: hash_passwort,
       create_at: new Date(),
     };
 
