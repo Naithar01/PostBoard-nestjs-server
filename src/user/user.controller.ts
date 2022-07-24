@@ -11,7 +11,8 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './DTO/user.dto';
 import { UserEntity } from './Entity/user.entity';
-import { LocalAuthGaurd } from './Gaurd/local-auth.gaurd';
+import { JwtAuthGuard } from './Gaurd/jwt-auth-guard';
+import { LocalAuthGaurd } from './Gaurd/local-auth-guard';
 import { UserService } from './user.service';
 
 @ApiTags('User')
@@ -31,8 +32,16 @@ export class UserController {
 
   @UseGuards(LocalAuthGaurd)
   @Post('login')
-  async login(@Request() req) {
+  async login(@Request() req): Promise<{ access_token: string }> {
     return await this.userService.loginUser(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    console.log('123');
+
+    return req.user;
   }
 
   @Delete(':id')
