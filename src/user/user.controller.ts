@@ -32,7 +32,7 @@ export class UserController {
   @UseGuards(LocalAuthGaurd)
   @Post('login')
   async login(@Request() req) {
-    return req.user;
+    return await this.userService.loginUser(req.user);
   }
 
   @Delete(':id')

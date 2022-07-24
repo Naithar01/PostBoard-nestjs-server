@@ -5,12 +5,14 @@ import { CreateUserDto } from './DTO/user.dto';
 import { UserEntity } from './Entity/user.entity';
 import { v4 as uuid } from 'uuid';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private UserRepository: Repository<UserEntity>,
+    private jwtService: JwtService,
   ) {}
 
   async getAllUser(): Promise<UserEntity[]> {
@@ -45,11 +47,11 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password } = createUserDto;
-    const hash_passwort = await bcrypt.hash(password, process.env.BCRYPT_SALT);
+    const hash_password = await bcrypt.hash(password, process.env.BCRYPT_SALT);
     const NewUser: UserEntity = {
       id: uuid(),
       username,
-      password: hash_passwort,
+      password: hash_password,
       create_at: new Date(),
     };
 
@@ -60,5 +62,12 @@ export class UserService {
 
   async deleteUser(id: string): Promise<void> {
     await this.UserRepository.delete({ id: id });
+  }
+
+  async loginUser(user: { username: string; id: string }) {
+    const payload = { username: user.username, sub: user.id };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
   }
 }
