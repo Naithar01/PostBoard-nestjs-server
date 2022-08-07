@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './DTO/user.dto';
@@ -47,6 +47,17 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     const { username, password } = createUserDto;
+
+    const overlapCheckUser = await this.UserRepository.findOne({
+      where: {
+        username: username,
+      },
+    });
+
+    if (overlapCheckUser) {
+      throw new HttpException('Enter Another UserName', 400);
+    }
+
     const hash_password = await bcrypt.hash(password, process.env.BCRYPT_SALT);
     const NewUser: UserEntity = {
       id: uuid(),
