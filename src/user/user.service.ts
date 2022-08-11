@@ -16,7 +16,7 @@ export class UserService {
   ) {}
 
   async getAllUser(): Promise<UserEntity[]> {
-    return await this.UserRepository.find({ relations: ['post'] });
+    return await this.UserRepository.find();
   }
 
   async findUserByUsername(username: string): Promise<UserEntity | null> {
@@ -24,6 +24,7 @@ export class UserService {
       where: {
         username: username,
       },
+      relations: ['post'],
     });
   }
 
@@ -83,5 +84,14 @@ export class UserService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async getUserById(id: string): Promise<UserEntity> {
+    return await this.UserRepository.findOne({
+      where: {
+        id: id,
+      },
+      relations: ['post'],
+    });
   }
 }

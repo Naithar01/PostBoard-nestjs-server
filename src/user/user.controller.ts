@@ -69,4 +69,9 @@ export class UserController {
     this.userService.deleteUser(id);
     return;
   }
+
+  @Get(':id')
+  getUserById(@Param('id') id: string): Promise<UserEntity> {
+    return this.userService.getUserById(id);
+  }
 }
