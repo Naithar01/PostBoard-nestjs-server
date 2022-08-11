@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { PostEntity } from 'src/post/Entity/post.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class UserEntity {
@@ -28,4 +29,7 @@ export class UserEntity {
     description: 'User 생성일',
   })
   create_at: Date;
+
+  @OneToMany(() => PostEntity, (post) => post.user, { onDelete: 'SET NULL' })
+  post?: PostEntity[];
 }

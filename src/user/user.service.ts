@@ -16,7 +16,7 @@ export class UserService {
   ) {}
 
   async getAllUser(): Promise<UserEntity[]> {
-    return await this.UserRepository.find();
+    return await this.UserRepository.find({ relations: ['post'] });
   }
 
   async findUserByUsername(username: string): Promise<UserEntity | null> {

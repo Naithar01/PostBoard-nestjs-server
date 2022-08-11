@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostDto, UpdatePostDto } from './DTO/post.dto';
 import { PostEntity } from './Entity/post.entity';
+import { UserEntity } from 'src/user/Entity/user.entity';
 import { v4 as uuid } from 'uuid';
 
 @Injectable()
@@ -10,6 +11,8 @@ export class PostService {
   constructor(
     @InjectRepository(PostEntity)
     private PostRepository: Repository<PostEntity>,
+    @InjectRepository(UserEntity)
+    private UserRepository: Repository<UserEntity>,
   ) {}
 
   async getAll(): Promise<PostEntity[]> {
@@ -18,13 +21,19 @@ export class PostService {
 
   async createPost(createPostDto: CreatePostDto): Promise<PostEntity> {
     const { title, content, author } = createPostDto;
-
-    const NewPost: PostEntity = {
+    // Post에 작성자 User로 넣어줄 코드
+    const AuthorUser = await this.UserRepository.findOne({
+      where: {
+        username: author,
+      },
+    });
+    const NewPost = {
       id: uuid(),
       author,
       title,
       content,
       create_at: new Date(),
+      user: AuthorUser,
     };
 
     await this.PostRepository.save(NewPost);
