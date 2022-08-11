@@ -75,11 +75,11 @@ export class UserService {
     await this.UserRepository.delete({ id: id });
   }
 
-  async loginUser(user: {
-    username: string;
-    id: string;
-  }): Promise<{ access_token: string }> {
-    const payload = { username: user.username, sub: user.id };
+  async loginUser(
+    username: string,
+    id: string,
+  ): Promise<{ access_token: string }> {
+    const payload = { username: username, sub: id };
     return {
       access_token: this.jwtService.sign(payload),
     };

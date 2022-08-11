@@ -5,9 +5,11 @@ import {
   Get,
   Param,
   Post,
-  Request,
+  Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './DTO/user.dto';
 import { UserEntity } from './Entity/user.entity';
@@ -32,13 +34,33 @@ export class UserController {
 
   @UseGuards(LocalAuthGaurd)
   @Post('login')
-  async login(@Request() req): Promise<{ access_token: string }> {
-    return await this.userService.loginUser(req.user);
+  async login(
+    @Res() res: Response,
+    @Req() req: Request,
+  ): Promise<Response<any, Record<string, any>>> {
+    const { username, id } = req.user as UserEntity;
+    const jwt = await this.userService.loginUser(username, id);
+    res.setHeader('Authorization', 'Bearer ' + jwt.access_token);
+    res.cookie('jwt', jwt.access_token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, //1 day
+    });
+    return res.status(201).json(jwt);
+  }
+
+  @Post('logout')
+  async logout(
+    @Res() res: Response,
+  ): Promise<Response<any, Record<string, any>>> {
+    res.cookie('jwt', '', {
+      maxAge: 0,
+    });
+    return res.status(200).json(true);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Req() req: Request) {
     return req.user;
   }
 
