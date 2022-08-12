@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePostDto, UpdatePostDto } from './DTO/post.dto';
@@ -21,19 +21,22 @@ export class PostService {
     createPostDto: CreatePostDto,
     user: UserEntity,
   ): Promise<PostEntity> {
-    const { title, content, author } = createPostDto;
-    // Post에 작성자 User로 넣어줄 코드
-    const NewPost = {
-      id: uuid(),
-      author,
-      title,
-      content,
-      create_at: new Date(),
-      user,
-    };
+    if (user) {
+      const { title, content } = createPostDto;
+      // Post에 작성자 User로 넣어줄 코드
+      const NewPost = {
+        id: uuid(),
+        author: user.username,
+        title,
+        content,
+        create_at: new Date(),
+        user,
+      };
 
-    await this.PostRepository.save(NewPost);
-    return NewPost;
+      await this.PostRepository.save(NewPost);
+      return NewPost;
+    }
+    throw new HttpException('Error', 400);
   }
 
   async deletePost(id: string): Promise<void> {
