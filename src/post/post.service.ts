@@ -11,29 +11,25 @@ export class PostService {
   constructor(
     @InjectRepository(PostEntity)
     private PostRepository: Repository<PostEntity>,
-    @InjectRepository(UserEntity)
-    private UserRepository: Repository<UserEntity>,
   ) {}
 
   async getAll(): Promise<PostEntity[]> {
     return await this.PostRepository.find();
   }
 
-  async createPost(createPostDto: CreatePostDto): Promise<PostEntity> {
+  async createPost(
+    createPostDto: CreatePostDto,
+    user: UserEntity,
+  ): Promise<PostEntity> {
     const { title, content, author } = createPostDto;
     // Post에 작성자 User로 넣어줄 코드
-    const AuthorUser = await this.UserRepository.findOne({
-      where: {
-        username: author,
-      },
-    });
     const NewPost = {
       id: uuid(),
       author,
       title,
       content,
       create_at: new Date(),
-      user: AuthorUser,
+      user,
     };
 
     await this.PostRepository.save(NewPost);
@@ -44,7 +40,10 @@ export class PostService {
     await this.PostRepository.delete({ id: id });
   }
 
-  async updatePost(id: string, updatePostDto: UpdatePostDto) {
+  async updatePost(
+    id: string,
+    updatePostDto: UpdatePostDto,
+  ): Promise<PostEntity> {
     const { title, content } = updatePostDto;
     const UpdatedPost = await this.PostRepository.findOne({
       where: {

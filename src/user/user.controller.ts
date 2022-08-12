@@ -39,8 +39,8 @@ export class UserController {
     @Res() res: Response,
     @GetUser() user: UserEntity,
   ): Promise<Response<any, Record<string, any>>> {
-    const { username, password, id } = user as UserEntity;
-    const jwt = await this.userService.loginUser(username, password, id);
+    const { username, id } = user as UserEntity;
+    const jwt = await this.userService.loginUser(username, id);
     res.setHeader('Authorization', 'Bearer ' + jwt.access_token);
     res.cookie('jwt', jwt.access_token, {
       httpOnly: true,

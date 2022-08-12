@@ -7,8 +7,12 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { GetUser } from 'src/user/decorator/get-user-decorator';
+import { UserEntity } from 'src/user/Entity/user.entity';
+import { JwtAuthGuard } from 'src/user/Gaurd/jwt-auth-guard';
 import { CreatePostDto, UpdatePostDto } from './DTO/post.dto';
 import { PostEntity } from './Entity/post.entity';
 import { PostService } from './post.service';
@@ -24,8 +28,12 @@ export class PostController {
   }
 
   @Post()
-  createPost(@Body() createPostDto: CreatePostDto): Promise<PostEntity> {
-    return this.postService.createPost(createPostDto);
+  @UseGuards(JwtAuthGuard)
+  createPost(
+    @Body() createPostDto: CreatePostDto,
+    @GetUser() user: UserEntity,
+  ): Promise<PostEntity> {
+    return this.postService.createPost(createPostDto, user);
   }
 
   @Delete(':id')
@@ -38,7 +46,7 @@ export class PostController {
   updatePost(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePostDto: UpdatePostDto,
-  ) {
+  ): Promise<PostEntity> {
     return this.postService.updatePost(id, updatePostDto);
   }
 
