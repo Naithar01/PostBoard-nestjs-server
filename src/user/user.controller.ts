@@ -16,6 +16,7 @@ import { UserEntity } from './Entity/user.entity';
 import { JwtAuthGuard } from './Gaurd/jwt-auth-guard';
 import { LocalAuthGaurd } from './Gaurd/local-auth-guard';
 import { UserService } from './user.service';
+import { GetUser } from './decorator/get-user-decorator';
 
 @ApiTags('User')
 @Controller('api/user')
@@ -36,10 +37,10 @@ export class UserController {
   @Post('login')
   async login(
     @Res() res: Response,
-    @Req() req: Request,
+    @GetUser() user: UserEntity,
   ): Promise<Response<any, Record<string, any>>> {
-    const { username, id } = req.user as UserEntity;
-    const jwt = await this.userService.loginUser(username, id);
+    const { username, password, id } = user as UserEntity;
+    const jwt = await this.userService.loginUser(username, password, id);
     res.setHeader('Authorization', 'Bearer ' + jwt.access_token);
     res.cookie('jwt', jwt.access_token, {
       httpOnly: true,
@@ -60,8 +61,8 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(@Req() req: Request) {
-    return req.user;
+  getProfile(@GetUser() user: UserEntity): UserEntity {
+    return user;
   }
 
   @Delete(':id')

@@ -38,8 +38,10 @@ export class UserService {
       const compare_passwort = await bcrypt.compare(password, user.password);
 
       if (compare_passwort) {
-        const { password, ...result } = user;
-        return result;
+        // 비멀번호 빼고
+        // const { password, ...result } = user;
+        // 비밀번호 같이
+        return user;
       }
     }
 
@@ -78,9 +80,10 @@ export class UserService {
 
   async loginUser(
     username: string,
+    password: string,
     id: string,
   ): Promise<{ access_token: string }> {
-    const payload = { username: username, sub: id };
+    const payload = { username: username, password: password, sub: id };
     return {
       access_token: this.jwtService.sign(payload),
     };
