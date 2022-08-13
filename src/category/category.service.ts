@@ -13,9 +13,7 @@ export class CategoryService {
   ) {}
 
   async getAllCategory(): Promise<CategoryEntity[]> {
-    return await this.CategoryRepository.find({
-      relations: ['post'],
-    });
+    return await this.CategoryRepository.find();
   }
 
   async getCategoryByName(name: string): Promise<CategoryEntity> {

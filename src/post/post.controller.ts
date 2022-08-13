@@ -24,8 +24,8 @@ export class PostController {
   constructor(private postService: PostService) {}
 
   @Get()
-  getAllPost(): Promise<PostEntity[]> {
-    return this.postService.getAll();
+  getAllPost(@Query('category') category: string): Promise<PostEntity[]> {
+    return this.postService.getAll(category);
   }
 
   @Post()

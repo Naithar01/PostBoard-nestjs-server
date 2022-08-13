@@ -17,7 +17,16 @@ export class PostService {
     private categoryService: CategoryService,
   ) {}
 
-  async getAll(): Promise<PostEntity[]> {
+  async getAll(category: string): Promise<PostEntity[]> {
+    if (category) {
+      return await this.PostRepository.find({
+        where: {
+          category: {
+            name: category,
+          },
+        },
+      });
+    }
     return await this.PostRepository.find();
   }
 
