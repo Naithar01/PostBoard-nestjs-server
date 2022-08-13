@@ -27,22 +27,26 @@ export class PostService {
     category: string,
   ): Promise<PostEntity> {
     if (user) {
-      const { title, content } = createPostDto;
       const findCategory: CategoryEntity =
         await this.categoryService.getCategoryByName(category);
-      // Post에 작성자 User로 넣어줄 코드
-      const NewPost: PostEntity = {
-        id: uuid(),
-        author: user.username,
-        title,
-        content,
-        create_at: new Date(),
-        user,
-        category: findCategory,
-      };
-      findCategory.posts.push(NewPost);
-      await this.PostRepository.save(NewPost);
-      return NewPost;
+      if (findCategory) {
+        const { title, content } = createPostDto;
+        // Post에 작성자 User로 넣어줄 코드
+        const NewPost: PostEntity = {
+          id: uuid(),
+          author: user.username,
+          title,
+          content,
+          create_at: new Date(),
+          user,
+          category: findCategory,
+        };
+        findCategory.post?.push(NewPost);
+        user.post?.push(NewPost);
+
+        await this.PostRepository.save(NewPost);
+        return NewPost;
+      }
     }
     throw new HttpException('Error', 400);
   }

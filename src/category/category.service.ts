@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CategoryEntity } from './Entity/category.entity';
 import { v4 as uuid } from 'uuid';
+import { CreateCategoryDto } from './DTO/category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -12,7 +13,9 @@ export class CategoryService {
   ) {}
 
   async getAllCategory(): Promise<CategoryEntity[]> {
-    return await this.CategoryRepository.find();
+    return await this.CategoryRepository.find({
+      relations: ['post'],
+    });
   }
 
   async getCategoryByName(name: string): Promise<CategoryEntity> {
@@ -23,7 +26,10 @@ export class CategoryService {
     return await this.CategoryRepository.findOne({ where: { id: id } });
   }
 
-  async createCategory(name: string): Promise<CategoryEntity> {
+  async createCategory(
+    createCategoryDto: CreateCategoryDto,
+  ): Promise<CategoryEntity> {
+    const { name } = createCategoryDto;
     const NewCategory: CategoryEntity = {
       id: uuid(),
       name,

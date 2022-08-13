@@ -30,5 +30,5 @@ export class CategoryEntity {
   @ApiProperty({
     description: 'Category 로 작성된 Post',
   })
-  posts?: PostEntity[];
+  post?: PostEntity[];
 }

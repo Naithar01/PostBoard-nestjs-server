@@ -43,7 +43,7 @@ export class PostEntity {
   })
   user: UserEntity;
 
-  @ManyToOne(() => CategoryEntity, (category) => category.posts, {
+  @ManyToOne(() => CategoryEntity, (category) => category.post, {
     onDelete: 'SET NULL',
   })
   @ApiProperty({
