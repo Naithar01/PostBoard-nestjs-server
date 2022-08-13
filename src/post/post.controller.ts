@@ -7,6 +7,7 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -32,8 +33,9 @@ export class PostController {
   createPost(
     @Body() createPostDto: CreatePostDto,
     @GetUser() user: UserEntity,
+    @Query('category') category: string,
   ): Promise<PostEntity> {
-    return this.postService.createPost(createPostDto, user);
+    return this.postService.createPost(createPostDto, user, category);
   }
 
   @Delete(':id')
