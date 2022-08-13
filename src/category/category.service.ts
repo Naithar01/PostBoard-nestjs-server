@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { CategoryEntity } from './Entity/category.entity';
 import { v4 as uuid } from 'uuid';
 import { CreateCategoryDto } from './DTO/category.dto';
@@ -38,5 +38,9 @@ export class CategoryService {
     await this.CategoryRepository.save(NewCategory);
 
     return NewCategory;
+  }
+
+  async deleteCategory(id: string): Promise<DeleteResult> {
+    return await this.CategoryRepository.delete({ id: id });
   }
 }
