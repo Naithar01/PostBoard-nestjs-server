@@ -40,7 +40,7 @@ export class PostService {
         user,
         category: findCategory,
       };
-      await findCategory.posts.push(NewPost);
+      findCategory.posts.push(NewPost);
       await this.PostRepository.save(NewPost);
       return NewPost;
     }
