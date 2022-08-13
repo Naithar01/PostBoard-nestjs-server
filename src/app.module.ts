@@ -6,6 +6,8 @@ import { PostEntity } from './post/Entity/post.entity';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/Entity/user.entity';
+import { CategoryModule } from './category/category.module';
+import { CategoryEntity } from './category/Entity/category.entity';
 
 @Module({
   imports: [
@@ -17,11 +19,12 @@ import { UserEntity } from './user/Entity/user.entity';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DATABASE,
-      entities: [PostEntity, UserEntity],
+      entities: [PostEntity, UserEntity, CategoryEntity],
       synchronize: true,
     }),
     PostModule,
     UserModule,
+    CategoryModule,
   ],
   controllers: [AppController],
 })
